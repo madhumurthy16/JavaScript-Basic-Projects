@@ -5,6 +5,6 @@ const color = document.querySelector('.color');
 
 btn.onclick = () => {
   const randomNumber = Math.floor( Math.random() * colors.length );
+  color.textContent = colors[randomNumber];
   document.body.style.backgroundColor = colors[randomNumber];
-  color.innerHTML = colors[randomNumber];
 }
