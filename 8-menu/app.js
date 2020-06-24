@@ -1,3 +1,4 @@
+
 const menu = [
   {
     id: 1,
@@ -71,14 +72,26 @@ const menu = [
     img: "./images/item-9.jpeg",
     desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
   },
+  {
+    id: 10,
+    title: "bison steak",
+    category: "dinner",
+    price: 22.99,
+    img: "./images/item-10.jpeg",
+    desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
+  },
 ];
 
 const sectionCenter = document.querySelector('.section-center');
+const btnContainer = document.querySelector('.btn-container');
 
+// Load Items
 window.addEventListener('DOMContentLoaded', () => {
   displayMenuItems(menu);
+  displayMenuButtons();
 });
 
+// Display Menu
 displayMenuItems = (menuItems) => {
   let displayMenu = menuItems.map(item => {
     return`
@@ -99,4 +112,43 @@ displayMenuItems = (menuItems) => {
 
   displayMenu = displayMenu.join('');
   sectionCenter.innerHTML = displayMenu;
+}
+
+// Display Menu buttons
+
+displayMenuButtons = () => {
+  const uniqueCategories = menu.reduce((values,item) => {
+    if(!values.includes(item.category)) {
+      values.push(item.category);
+    }
+    return values;
+  }, ['all']
+  );
+
+  const categoryBtns = uniqueCategories.map(item => {
+    return `
+      <button type="button" class="filter-btn" data-id="${item}">${item}</button>
+    `
+  }).join('');
+
+  btnContainer.innerHTML = categoryBtns;
+  const filterBtns = document.querySelectorAll('.filter-btn');
+
+  // Filter Items
+
+  filterBtns.forEach((btn) => {
+    btn.onclick = (e) => {
+      const category = e.currentTarget.dataset.id;
+      const menuCategory= menu.filter(menuItem => {
+         return category === menuItem.category;
+      });
+
+      if(category === 'all') {
+        displayMenuItems(menu);
+      }
+      else {
+        displayMenuItems(menuCategory);
+      }
+    }
+  });
 }
