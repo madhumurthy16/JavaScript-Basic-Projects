@@ -11,3 +11,9 @@ switchBtn.onclick = () => {
     videoContainer.play();
   }
 }
+
+const preloader = document.querySelector('.preloader');
+
+window.onload = () => {
+  preloader.classList.add('hide-preloader');
+}
