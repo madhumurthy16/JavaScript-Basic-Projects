@@ -42,23 +42,45 @@ const hours = futureDate.getHours();
 const mins = futureDate.getMinutes();
 const secs = futureDate.getSeconds();
 
-giveaway.innerHTML = `giveaway ends on ${day}, ${date} ${month} ${year}, ${hours}:${mins}am`;
-
-const currentTime = new Date().getTime();
+giveaway.textContent = `giveaway ends on ${day}, ${date} ${month} ${year}, ${hours}:${mins}am`;
 const futureTime = futureDate.getTime();
 
-// Extract days, hours, minutes and secs
-const diff = futureTime - currentTime;
+getRemainingTime = () => {
+  const currentTime = new Date().getTime();
+  const diff = futureTime - currentTime;
+  // 1sec = 1000ms
+  // 1min = 60 sec
+  // 1hour = 60 mins
+  // 1day = 24hours
 
-// 1 sec = 1000ms
-// 1 min = 60 sec
-// 1 hour = 60 mins
-// 1 day = 24*60*60*1000
+  // values in milliseconds
 
-// Num of days
+  const oneDay = 24*60*60*1000;
+  const oneHour = 60*60*1000;
+  const oneMinute = 60*1000
 
-const days = Math.floor(diff/(24*60*60*1000));
-console.log(diff/(24*60*60*1000));
-console.log(days);
-const remainder = diff%(24*60*60*1000);
-console.log(remainder);
+  // Calculate all values
+
+  const daysLeft = Math.floor(diff / oneDay);
+  let hoursLeft = Math.floor((diff % oneDay) / oneHour);
+  let minutesLeft = Math.floor((diff % oneHour) / oneMinute);
+  let secondsLeft = Math.floor((diff % oneMinute) / 1000);
+
+  // Set values array
+
+  const values = [daysLeft, hoursLeft, minutesLeft, secondsLeft];
+  items.forEach((item, index) => {
+    item.innerHTML = values[index];
+  });
+
+  if(diff < 0) {
+    clearInterval(countdown);
+    deadline.innerHTML = `<h4 class="expires">sorry, this giveaway has expired</h4>`;
+  }
+}
+
+// Countdown
+let countdown = setInterval(getRemainingTime, 1000);
+
+// Set initial values
+getRemainingTime();
